@@ -1,24 +1,24 @@
 package com.harish.tambola;
 
-import com.harish.tambola.dto.Ticket;
 import com.harish.tambola.dto.Tickets;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class TicketService {
 
     public Tickets getTickets(Integer numberOfTickets) {
         Tickets tickets = new Tickets();
-        List<Ticket> ticketList = new ArrayList<>();
+        tickets.setTicketList(new ArrayList<>());
+        return getGeneratedTickets(numberOfTickets, tickets);
+
+    }
+
+    private Tickets getGeneratedTickets(Integer numberOfTickets, Tickets tickets) {
         for (int i = 0; i < numberOfTickets; i++) {
-            Ticket ticket = new Ticket();
-            ticket.setTicketData(TicketGenerator.getTicket());
-            ticketList.add(ticket);
+            tickets.getTicketList().add(new TicketGenerator().getTicket());
         }
-        tickets.setTicketList(ticketList);
         return tickets;
     }
 }

@@ -1,5 +1,7 @@
 package com.harish.tambola;
 
+import com.harish.tambola.dto.Ticket;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -8,21 +10,23 @@ import java.util.Random;
 import java.util.Set;
 
 public class TicketGenerator {
-    public static final Integer maxNumbersInRow = 5;
-    public static final Integer maxNumbersInColumn = 3;
-    public static int[][] ticket = new int[3][9];
+    public  final Integer maxNumbersInRow = 5;
+    public  final Integer maxNumbersInColumn = 3;
+    public  Integer[][] ticketData = new Integer[3][9];
 
-    public static int[][] getTicket() {
+    public  Ticket getTicket() {
         makeTicket();
-        while(!eachColumnInTicketIsFilled(ticket)) {
+        while(!eachColumnInTicketIsFilled(ticketData)) {
             makeTicket();
         }
-        sortAllColumnsInTicket(ticket);
+        sortAllColumnsInTicket(ticketData);
+        Ticket ticket = new Ticket();
+        ticket.setTicketData(ticketData);
         return ticket;
         //printTicket(ticket);
     }
 
-    private static void sortAllColumnsInTicket(int[][] ticket) {
+    private void sortAllColumnsInTicket(Integer[][] ticket) {
         for(int columnNumber=0; columnNumber < ticket[0].length ; columnNumber++) {
             List<Integer> positionsFilledInColumn = getPositionsFilledInColumn(columnNumber, ticket);
             Collections.sort(positionsFilledInColumn);
@@ -50,7 +54,7 @@ public class TicketGenerator {
             }
         }
     }
-    private static List<Integer> getPositionsFilledInColumn(int columnNumber, int[][] ticket) {
+    private List<Integer> getPositionsFilledInColumn(int columnNumber, Integer[][] ticket) {
         List<Integer> positionsFilledInColumn = new ArrayList<Integer>();
         for( int i= 0; i<3;i++) {
             if(ticket[i][columnNumber] != 0) {
@@ -60,7 +64,7 @@ public class TicketGenerator {
         return positionsFilledInColumn;
     }
 
-    private static void printTicket(int[][] ticket) {
+    private void printTicket(int[][] ticket) {
         for(int i =0 ; i < ticket.length ; i++) {
             System.out.println();
             for(int j = 0 ; j < ticket[i].length ; j++) {
@@ -72,7 +76,7 @@ public class TicketGenerator {
         }
     }
 
-    private static boolean eachColumnInTicketIsFilled(int[][] ticket) {
+    private boolean eachColumnInTicketIsFilled(Integer[][] ticket) {
         for(int i =0 ; i < ticket[0].length ; i++) {
             if(ticket[0][i] == 0 && ticket[1][i] ==0 && ticket[2][i] == 0 )
                 return false;
@@ -80,13 +84,13 @@ public class TicketGenerator {
         return true;
     }
 
-    private static void makeTicket() {
-        for( int i=0; i<ticket.length; i++) {
-            makeRow(maxNumbersInRow, ticket[i], ticket);
+    private  void makeTicket() {
+        for(int i = 0; i< ticketData.length; i++) {
+            makeRow(maxNumbersInRow, ticketData[i], ticketData);
         }
     }
 
-    private static void makeRow(Integer maxNumbersInRow, int[] ticket, int[][] fullTicket) {
+    private void makeRow(Integer maxNumbersInRow, Integer[] ticket, Integer[][] fullTicket) {
         Random random = new Random();
         Set<Integer> columnsNoToBeFilled = findColumnsToBeFilledForRow();
 
@@ -104,7 +108,7 @@ public class TicketGenerator {
         }
     }
 
-    private static Integer findNextNumberBetween(int min, int max,int[][] fullTicket) {
+    private Integer findNextNumberBetween(int min, int max,Integer[][] fullTicket) {
         Random random = new Random();
         int nextNumber  = random.nextInt(max - min + 1) + min;
         while (ticketContains(nextNumber, fullTicket)) {
@@ -113,17 +117,17 @@ public class TicketGenerator {
         return nextNumber;
     }
 
-    private static boolean ticketContains(int nextNumber, int[][] fullTicket) {
+    private boolean ticketContains(int nextNumber, Integer[][] fullTicket) {
         for(int i =0 ; i < fullTicket.length ; i++) {
             for(int j = 0 ; j < fullTicket[i].length ; j++) {
-                if(nextNumber == fullTicket[i][j])
+                if(fullTicket[i][j] != null && nextNumber == fullTicket[i][j])
                     return true;
             }
         }
         return false;
     }
 
-    private static Set<Integer> findColumnsToBeFilledForRow() {
+    private Set<Integer> findColumnsToBeFilledForRow() {
         Random random = new Random();
         Set<Integer> columnsNoToBeFilled = new  HashSet<Integer>();
         for(int i =0;i<5;i++) {
@@ -134,7 +138,7 @@ public class TicketGenerator {
         return columnsNoToBeFilled;
     }
 
-    private static void printTicketRow(int ticket[]) {
+    private void printTicketRow(int ticket[]) {
         System.out.println();
         for (int i :ticket){
             if(i ==0){

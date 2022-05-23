@@ -1,13 +1,13 @@
 package com.harish.tambola.dto;
 
 public class Ticket {
-    int[][] ticketData;
+    Integer[][] ticketData;
 
-    public int[][] getTicketData() {
+    public Integer[][] getTicketData() {
         return ticketData;
     }
 
-    public void setTicketData(int[][] ticketData) {
+    public void setTicketData(Integer[][] ticketData) {
         this.ticketData = ticketData;
     }
 }
